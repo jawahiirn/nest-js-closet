@@ -8,13 +8,15 @@ import {
   HttpStatus,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 
 @Controller('coffees')
 export class CoffeesController {
   @Get()
-  findAll() {
-    return 'YO COFFEES IN COFFEES';
+  findAll(@Query() pagination) {
+    const {limit, offset} = pagination;
+    return `This action returns all coffees from ${limit} with ${offset}`
   }
   @Get(':id')
   findOne(@Param('id') id: string) {
