@@ -16,7 +16,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Controller('coffees')
 export class CoffeesController {
-  constructor(private readonly coffeeService: CoffeesService) {}
+  constructor(private readonly coffeeService: CoffeesService) { }
 
   @Get()
   findAll(@Query() pagination) {
@@ -29,8 +29,7 @@ export class CoffeesController {
   }
   @Post()
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
-    console.log(createCoffeeDto instanceof CreateCoffeeDto);
-    return createCoffeeDto;
+    return this.coffeeService.create(createCoffeeDto);
   }
 
   @Patch(':id')
