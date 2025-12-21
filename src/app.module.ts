@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
@@ -8,18 +8,23 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     CoffeesModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: 'localhost',
         port: 5432,
         username: 'postgres',
-        password: process.env.DATABASE_PASSWORD,
+        password: configService.get<string>('DATABASE_PASSWORD'),
         database: 'postgres',
         autoLoadEntities: true,
         synchronize: true,
       }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AppController],
