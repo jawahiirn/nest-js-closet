@@ -19,6 +19,7 @@ export class CoffeeBrandsFactory {
   controllers: [CoffeesController],
   providers: [
     CoffeesService,
+    CoffeeBrandsFactory,
     {
       provide: COFFEE_BRANDS,
       useFactory: (brandsFactory: CoffeeBrandsFactory) =>
