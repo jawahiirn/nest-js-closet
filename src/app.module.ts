@@ -10,23 +10,15 @@ import { DatabaseModule } from './database/database.module';
 @Module({
   imports: [
     CoffeesModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'postgres',
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        database: 'postgres',
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
-      inject: [ConfigService],
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      autoLoadEntities: true,
+      synchronize: true,
     }),
     CoffeeRatingModule,
     DatabaseModule,
@@ -34,4 +26,4 @@ import { DatabaseModule } from './database/database.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
