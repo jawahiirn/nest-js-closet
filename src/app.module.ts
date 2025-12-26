@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
@@ -11,6 +11,17 @@ import Joi from '@hapi/joi';
 
 @Module({
   imports: [
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres',
+        host: process.env.DATABASE_HOST,
+        port: Number(process.env.DATABASE_PORT),
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        autoLoadEntities: true,
+        synchronize: true,
+      }),
+    }),
     CoffeesModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
@@ -18,15 +29,6 @@ import Joi from '@hapi/joi';
         DATABASE_PORT: Joi.required().default(5432),
       }),
       load: [appConfig],
-    }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DATABASE_HOST,
-      port: Number(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      autoLoadEntities: true,
-      synchronize: true,
     }),
     CoffeeRatingModule,
     DatabaseModule,
