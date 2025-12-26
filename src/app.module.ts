@@ -6,6 +6,7 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DatabaseModule } from './database/database.module';
+import appConfig from './config/app.config';
 import Joi from '@hapi/joi';
 
 @Module({
@@ -16,6 +17,7 @@ import Joi from '@hapi/joi';
         DATABASE_HOST: Joi.required(),
         DATABASE_PORT: Joi.required().default(5432),
       }),
+      load: [appConfig],
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
