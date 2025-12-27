@@ -15,22 +15,18 @@ import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
-import { Protocol } from '../common/decorators/protocol';
+import { Public } from '../common/decorators/public.decorator';
 
 @Controller('coffees')
 export class CoffeesController {
   constructor(
     private readonly coffeeService: CoffeesService,
     @Inject(REQUEST) private readonly request: Request,
-  ) {
-    console.log('coffee controller created');
-  }
+  ) {}
 
+  @Public()
   @Get()
-  findAll(
-    @Protocol('https') protocol: string,
-    @Query() paginationQuery: PaginationQueryDto,
-  ) {
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
     return this.coffeeService.findAll(paginationQuery);
   }
   @Get(':id')
