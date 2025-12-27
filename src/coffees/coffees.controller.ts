@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Inject,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
@@ -38,7 +39,10 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(
+    @Param('id') id: number,
+    @Body(ValidationPipe) updateCoffeeDto: UpdateCoffeeDto,
+  ) {
     return this.coffeeService.update(id, updateCoffeeDto);
   }
 
