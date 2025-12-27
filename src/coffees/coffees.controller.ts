@@ -17,7 +17,6 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 
-@UsePipes(ValidationPipe)
 @Controller('coffees')
 export class CoffeesController {
   constructor(
@@ -27,6 +26,7 @@ export class CoffeesController {
     console.log('coffee controller created');
   }
 
+  @UsePipes(ValidationPipe)
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
     return this.coffeeService.findAll(paginationQuery);
