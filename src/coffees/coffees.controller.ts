@@ -17,17 +17,22 @@ import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { Public } from '../common/decorators/public.decorator';
 import { ParseIntPipe } from '../common/pipes/parse-int/parse-int.pipe';
+import { Protocol } from '../common/decorators/protocol.decorator';
 
 @Controller('coffees')
 export class CoffeesController {
   constructor(
     private readonly coffeeService: CoffeesService,
     @Inject(REQUEST) private readonly request: Request,
-  ) { }
+  ) {}
 
   @Public()
   @Get()
-  findAll(@Query() paginationQuery: PaginationQueryDto) {
+  findAll(
+    @Protocol('https') protocol: string,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    console.log(protocol, typeof protocol);
     return this.coffeeService.findAll(paginationQuery);
   }
   @Get(':id')
