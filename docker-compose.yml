@@ -7,4 +7,11 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: 8991
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+  test-db:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
