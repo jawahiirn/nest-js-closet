@@ -1,9 +1,14 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { SignUpDto } from './dto/sign-up.dto/sign-up.dto';
 import { HashingService } from '../hashing/hashing.service';
+import { SignInDto } from './dto/sign-in.dto/sign-in.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -26,5 +31,23 @@ export class AuthenticationService {
       }
       throw error;
     }
+  }
+
+  async signIn(signInDto: SignInDto) {
+    const user = await this.userRepository.findOneBy({
+      email: signInDto.email,
+    });
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    const isEqual = await this.hashingService.compare(
+      signInDto.password,
+      user.password,
+    );
+    if (!isEqual) {
+      throw new UnauthorizedException();
+    }
+    // TODO: JWT Token based auth
+    return true;
   }
 }

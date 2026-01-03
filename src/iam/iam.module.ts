@@ -3,11 +3,17 @@ import { BcryptService } from './hashing/bcrypt.service';
 import { HashingService } from './hashing/hashing.service';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { AuthenticationService } from './authentication/authentication.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
   // When Hashing service is resolved the interface Bcrypt will be pointed to.
-  providers: [{ provide: HashingService, useClass: BcryptService }, AuthenticationService],
+  providers: [
+    { provide: HashingService, useClass: BcryptService },
+    AuthenticationService,
+  ],
   controllers: [AuthenticationController],
+  imports: [TypeOrmModule.forFeature([User])],
 })
 export class IamModule {}
