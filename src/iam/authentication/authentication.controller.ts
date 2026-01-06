@@ -29,11 +29,11 @@ export class AuthenticationController {
     @Res({ passthrough: true }) response: Response,
     @Body() payload: SignInDto,
   ) {
-    const { accessToken } = await this.authenticationService.signIn(payload);
-    response.cookie('accessToken', accessToken, {
-      secure: true,
-      httpOnly: true,
-      sameSite: true,
-    });
+    return await this.authenticationService.signIn(payload);
+    // response.cookie('accessToken', accessToken, {
+    //   secure: true,
+    //   httpOnly: true,
+    //   sameSite: true,
+    // });
   }
 }
