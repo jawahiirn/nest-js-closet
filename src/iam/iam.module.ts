@@ -11,6 +11,8 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './guards/access-token.guard';
 import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
+import { RolesGuard } from './authorization/guards/roles.guard';
+import { AuthenticationGuard } from './guards/authentication.guard';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
@@ -19,8 +21,13 @@ import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.stora
     { provide: HashingService, useClass: BcryptService },
     {
       provide: APP_GUARD,
-      useValue: AccessTokenGuard,
+      useClass: AuthenticationGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    AccessTokenGuard,
     AuthenticationService,
     RefreshTokenIdsStorage,
   ],
