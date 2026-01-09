@@ -87,7 +87,8 @@ export class AuthenticationService {
       this.signToken<Partial<ActiveUserData>>(
         user.id,
         this.jwtConfiguration.accessTokenTtl,
-        { email: user.email, role: user.role },
+        // IRL apps: store permissions in DB. This is bad example. In token: set the permission IDs then
+        { email: user.email, role: user.role, permissions: user.permissions },
       ),
       this.signToken(user.id, this.jwtConfiguration.refreshToken, {
         refreshTokenId,
