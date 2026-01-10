@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { AccessTokenGuard } from './access-token.guard';
 import { AuthType } from '../authentication/enums/auth-type.enum';
 import { AUTH_TYPE_KEY } from '../authentication/decorators/auth.decorator';
+import { ApiKeyGuard } from '../authentication/guards/api-key.guard';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -21,9 +22,11 @@ export class AuthenticationGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly accessTokenGuard: AccessTokenGuard,
+    private readonly apiKeyGuard: ApiKeyGuard,
   ) {
     this.authTypeGuardMap = {
       [AuthType.Bearer]: this.accessTokenGuard,
+      [AuthType.ApiKey]: this.apiKeyGuard,
       [AuthType.None]: { canActivate: () => true },
     };
   }

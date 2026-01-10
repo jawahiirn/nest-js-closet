@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class ApiKeysService {
-  constructor(private readonly hashingService: HashingService) {}
+  constructor(private readonly hashingService: HashingService) { }
   async createAndHash(id: number): Promise<GeneratedApiKeyPayload> {
     const apiKey = this.generatedApiKey(id);
     const hashedKey = await this.hashingService.hash(apiKey);
@@ -19,8 +19,9 @@ export class ApiKeysService {
   }
 
   extractIdFromApiKey(apiKey: string): string {
-    const [id] = Buffer.from(apiKey, 'base64').toString('base64');
-    return id;
+    const decodedToken = Buffer.from(apiKey, 'base64').toString();
+    const [id, uuid] = decodedToken.split(' ');
+    return uuid;
   }
 
   private generatedApiKey(id: number): string {

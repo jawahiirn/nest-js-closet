@@ -14,11 +14,12 @@ import { ActiveUser } from '../iam/decorators/active-user.decorator';
 import { type ActiveUserData } from '../iam/interfaces/active-user-data.interface';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { Role } from '../users/enums/roles.enum';
-import { Permission } from '../iam/authentication/permission.type';
-import { Permissions } from '../iam/authentication/decorators/permissions.decorator';
 import { Policies } from '../iam/authentication/decorators/policies.decorator';
 import { FrameworkContributorPolicy } from '../iam/authorization/policies/framework-contributor.policy';
+import { AuthType } from '../iam/authentication/enums/auth-type.enum';
+import { Auth } from '../iam/authentication/decorators/auth.decorator';
 
+@Auth(AuthType.Bearer, AuthType.ApiKey)
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {}

@@ -17,6 +17,8 @@ import { PolicyHandlerStorage } from './authorization/policies/policy-handler.st
 import { FrameworkContributorPolicyHandler } from './authorization/policies/framework-contributor.policy';
 import { PoliciesGuard } from './authorization/guards/policies.guard';
 import { ApiKeysService } from './authentication/api-keys.service';
+import { ApiKey } from '../users/api-key/entities/api-key.entity';
+import { ApiKeyGuard } from './authentication/guards/api-key.guard';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
@@ -41,10 +43,11 @@ import { ApiKeysService } from './authentication/api-keys.service';
     PolicyHandlerStorage,
     FrameworkContributorPolicyHandler,
     ApiKeysService,
+    ApiKeyGuard,
   ],
   controllers: [AuthenticationController],
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, ApiKey]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],
