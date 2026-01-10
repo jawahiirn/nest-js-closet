@@ -13,6 +13,9 @@ import { AccessTokenGuard } from './guards/access-token.guard';
 import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { PermissionsGuard } from './authorization/guards/permissions.guard';
+import { PolicyHandlerStorage } from './authorization/policies/policy-handler.storage';
+import { FrameworkContributorPolicyHandler } from './authorization/policies/framework-contributor.policy';
+import { PoliciesGuard } from './authorization/guards/policies.guard';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
@@ -27,9 +30,15 @@ import { PermissionsGuard } from './authorization/guards/permissions.guard';
       provide: APP_GUARD,
       useClass: PermissionsGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: PoliciesGuard,
+    },
     AccessTokenGuard,
     AuthenticationService,
     RefreshTokenIdsStorage,
+    PolicyHandlerStorage,
+    FrameworkContributorPolicyHandler,
   ],
   controllers: [AuthenticationController],
   imports: [
