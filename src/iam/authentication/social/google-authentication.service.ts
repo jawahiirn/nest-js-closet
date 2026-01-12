@@ -10,6 +10,7 @@ import { AuthenticationService } from '../authentication.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../../users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { ActiveUserData } from '../../interfaces/active-user-data.interface';
 
 @Injectable()
 export class GoogleAuthenticationService implements OnModuleInit {
@@ -19,7 +20,7 @@ export class GoogleAuthenticationService implements OnModuleInit {
     private readonly configService: ConfigService,
     private readonly authService: AuthenticationService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   onModuleInit() {
     const clientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
