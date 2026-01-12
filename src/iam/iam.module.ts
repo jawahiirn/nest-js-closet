@@ -19,6 +19,8 @@ import { PoliciesGuard } from './authorization/guards/policies.guard';
 import { ApiKeysService } from './authentication/api-keys.service';
 import { ApiKey } from '../users/api-key/entities/api-key.entity';
 import { ApiKeyGuard } from './authentication/guards/api-key.guard';
+import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
+import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
@@ -44,8 +46,9 @@ import { ApiKeyGuard } from './authentication/guards/api-key.guard';
     FrameworkContributorPolicyHandler,
     ApiKeysService,
     ApiKeyGuard,
+    GoogleAuthenticationService,
   ],
-  controllers: [AuthenticationController],
+  controllers: [AuthenticationController, GoogleAuthenticationController],
   imports: [
     TypeOrmModule.forFeature([User, ApiKey]),
     JwtModule.registerAsync(jwtConfig.asProvider()),

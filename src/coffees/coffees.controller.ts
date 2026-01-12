@@ -34,7 +34,6 @@ export class CoffeesController {
 
   @Get()
   findAll(@ActiveUser() user: ActiveUserData) {
-    console.log('active user', user);
     return this.coffeesService.findAll();
   }
 
