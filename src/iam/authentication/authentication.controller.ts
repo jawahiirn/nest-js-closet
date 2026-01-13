@@ -13,11 +13,18 @@ import { SignInDto } from './dto/sign-in.dto';
 import { Auth } from './decorators/auth.decorator';
 import { AuthType } from './enums/auth-type.enum';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { type ActiveUserData } from '../interfaces/active-user-data.interface';
+import { ActiveUser } from '../decorators/active-user.decorator';
+import { OtpAuthenticationService } from './otp-authentication.service';
+import { toFileStream } from 'qrcode';
 
 @Auth(AuthType.None)
 @Controller('authentication')
 export class AuthenticationController {
-  constructor(private readonly authenticationService: AuthenticationService) {}
+  constructor(
+    private readonly authenticationService: AuthenticationService,
+    private readonly otpAuthService: OtpAuthenticationService,
+  ) {}
 
   @Post('sign-up')
   signUp(@Body() payload: SignUpDto) {
@@ -42,5 +49,20 @@ export class AuthenticationController {
   @Post('refresh-token')
   refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.authenticationService.refreshTokens(refreshTokenDto);
+  }
+
+  @Auth(AuthType.Bearer)
+  @HttpCode(HttpStatus.OK)
+  @Post('2fa/generate')
+  async generateQrCode(
+    @ActiveUser() activeUser: ActiveUserData,
+    @Res() response: Response,
+  ) {
+    const { secret, uri } = await this.otpAuthService.generateSecret(
+      activeUser.email,
+    );
+    await this.otpAuthService.enableTfaForUser(activeUser.email, secret);
+    response.type('png');
+    return toFileStream(response, uri);
   }
 }
