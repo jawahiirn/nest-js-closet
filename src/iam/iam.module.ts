@@ -21,6 +21,7 @@ import { ApiKey } from '../users/api-key/entities/api-key.entity';
 import { ApiKeyGuard } from './authentication/guards/api-key.guard';
 import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
 import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
+import { OtpAuthenticationService } from './authentication/otp-authentication.service';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
@@ -47,6 +48,7 @@ import { GoogleAuthenticationController } from './authentication/social/google-a
     ApiKeysService,
     ApiKeyGuard,
     GoogleAuthenticationService,
+    OtpAuthenticationService,
   ],
   controllers: [AuthenticationController, GoogleAuthenticationController],
   imports: [

@@ -20,7 +20,10 @@ export class GoogleAuthenticationService implements OnModuleInit {
     private readonly configService: ConfigService,
     private readonly authService: AuthenticationService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
+  ) {
+    console.log('ID:', process.env.GOOGLE_CLIENT_ID);
+    console.log('Secret:', process.env.GOOGLE_CLIENT_SECRET);
+  }
 
   onModuleInit() {
     const clientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
