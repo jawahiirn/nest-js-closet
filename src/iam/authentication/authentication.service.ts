@@ -20,6 +20,7 @@ import {
   RefreshTokenIdsStorage,
 } from './refresh-token-ids.storage';
 import { randomUUID } from 'node:crypto';
+import { OtpAuthenticationService } from './otp-authentication.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -30,6 +31,7 @@ export class AuthenticationService {
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     private readonly refreshTokenIdsStorage: RefreshTokenIdsStorage,
+    private readonly otpAuthService: OtpAuthenticationService,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -55,12 +57,22 @@ export class AuthenticationService {
     if (!user) {
       throw new UnauthorizedException();
     }
+
     const isEqual = await this.hashingService.compare(
       signInDto.password,
       user.password,
     );
     if (!isEqual) {
       throw new UnauthorizedException();
+    }
+    if (user.isTfaEnabled) {
+      const isValidOtp = await this.otpAuthService.verify(
+        signInDto?.tfaCode ?? '',
+        user.tfaSecret,
+      );
+      if (!isValidOtp) {
+        throw new UnauthorizedException('Invalid 2FA code');
+      }
     }
     return this.generateTokens(user);
   }
