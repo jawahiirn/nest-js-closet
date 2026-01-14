@@ -24,9 +24,11 @@ import { GoogleAuthenticationController } from './authentication/social/google-a
 import { OtpAuthenticationService } from './authentication/otp-authentication.service';
 import { SessionAuthenticationService } from './authentication/session-authentication.service';
 import { SessionAuthenticationController } from './authentication/session-authentication.controller';
+import { UserSerializer } from './authentication/serializers/user-serializer';
 import session from 'express-session';
 import passport from 'passport';
-import { UserSerializer } from './authentication/serializers/user-serializer';
+import createRedisStore from 'connect-redis';
+import { Redis } from 'ioredis';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
@@ -70,9 +72,11 @@ import { UserSerializer } from './authentication/serializers/user-serializer';
 })
 export class IamModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    const RedisStore = createRedisStore(session);
     consumer
       .apply(
         session({
+          store: new RedisStore({ client: new Redis(6379, 'localhost') }),
           secret: process.env.SESSION_SECRET || 'fallback-secret',
           resave: false,
           saveUninitialized: false,
