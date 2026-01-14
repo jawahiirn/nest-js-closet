@@ -26,6 +26,7 @@ import { SessionAuthenticationService } from './authentication/session-authentic
 import { SessionAuthenticationController } from './authentication/session-authentication.controller';
 import session from 'express-session';
 import passport from 'passport';
+import { UserSerializer } from './authentication/serializers/user-serializer';
 
 @Module({
   // Hashing Service is the resolved ? then point to BcryptService
@@ -54,8 +55,13 @@ import passport from 'passport';
     GoogleAuthenticationService,
     OtpAuthenticationService,
     SessionAuthenticationService,
+    UserSerializer,
   ],
-  controllers: [AuthenticationController, GoogleAuthenticationController, SessionAuthenticationController],
+  controllers: [
+    AuthenticationController,
+    GoogleAuthenticationController,
+    SessionAuthenticationController,
+  ],
   imports: [
     TypeOrmModule.forFeature([User, ApiKey]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
