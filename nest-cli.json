@@ -3,6 +3,11 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
+<<<<<<< HEAD
     "deleteOutDir": true
+=======
+    "deleteOutDir": true,
+    "plugins": ["@nestjs/swagger/plugin"]
+>>>>>>> 9ba08cacd6e291edf891b54657a1b61264eb2935
   }
 }

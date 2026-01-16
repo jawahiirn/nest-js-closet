@@ -8,8 +8,18 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+<<<<<<< HEAD
   redis:
     image: redis
     ports:
       - "6379:6379"
     restart: always
+=======
+  test-db:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+>>>>>>> 9ba08cacd6e291edf891b54657a1b61264eb2935
